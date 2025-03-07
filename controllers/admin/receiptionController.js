@@ -1853,7 +1853,7 @@ export const generateFinalReceipt = async (req, res) => {
 </head>
 <body>
   <div class="container">
-    <h1>Saideep Hospital</h1>
+    <h1>Tambe Hospital</h1>
     <h2>Payment Receipt</h2>
     <div class="details">
       <table>
@@ -3200,7 +3200,7 @@ export const generateOpdReceipt = async (req, res) => {
 </head>
 <body>
   <div class="container">
-    <h1>Saideep Hospital</h1>
+    <h1>Tambe Hospital</h1>
     <h2>Payment Receipt</h2>
     <div class="details">
       <table>
@@ -3456,7 +3456,7 @@ export const generateaIpddReceipt = async (req, res) => {
 </head>
 <body>
   <div class="container">
-    <h1>Saideep Hospital</h1>
+    <h1>Tambe Hospital</h1>
     <h2>Payment Receipt</h2>
     <div class="details">
       <table>
