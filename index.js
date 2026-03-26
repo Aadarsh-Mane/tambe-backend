@@ -74,9 +74,7 @@ app.use("/insurance", insuranceRouter);
 app.get("/my", getProducts);
 
 app.get("/", (req, res) => {
-  return res
-    .status(200)
-    .json("Welcome to Ai in HealthCare common backend v1.3");
+  return res.status(200).json("Welcome to Ai in HealthCare tambe backend v1.3");
 });
 let medicines = {};
 fs.readFile("./test.json", "utf8", (err, data) => {
