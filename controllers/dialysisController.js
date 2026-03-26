@@ -63,7 +63,7 @@ export const registerDialysisPatient = async (req, res) => {
     // Generate registration PDF
     const pdfContent = generateDialysisRegistrationPDF(
       dialysisRegistration,
-      patient
+      patient,
     );
     const pdfBuffer = await generatePdf(pdfContent);
 
@@ -72,7 +72,7 @@ export const registerDialysisPatient = async (req, res) => {
     const driveLink = await uploadToDrive(
       pdfBuffer,
       fileName,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f",
     );
 
     res.status(201).json({
@@ -234,7 +234,7 @@ export const endDialysisSession = async (req, res) => {
 
     // Calculate duration
     const duration = Math.floor(
-      (new Date() - session.sessionStartTime) / (1000 * 60)
+      (new Date() - session.sessionStartTime) / (1000 * 60),
     );
 
     // Update session
@@ -263,7 +263,7 @@ export const endDialysisSession = async (req, res) => {
     // Free up machine
     await DialysisMachine.findOneAndUpdate(
       { machineId: session.machineId },
-      { $unset: { currentSession: 1 } }
+      { $unset: { currentSession: 1 } },
     );
 
     // Update inventory usage
@@ -276,7 +276,7 @@ export const endDialysisSession = async (req, res) => {
     const driveLink = await uploadToDrive(
       pdfBuffer,
       fileName,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f",
     );
 
     res.status(200).json({
@@ -438,7 +438,7 @@ export const getDialysisHistory = async (req, res) => {
         (session) =>
           session.adverseEvents.length > 0 ||
           (session.postDialysisMonitoring &&
-            session.postDialysisMonitoring.complications.length > 0)
+            session.postDialysisMonitoring.complications.length > 0),
       );
     }
 
@@ -449,7 +449,7 @@ export const getDialysisHistory = async (req, res) => {
     const driveLink = await uploadToDrive(
       pdfBuffer,
       fileName,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f",
     );
 
     res.status(200).json({
@@ -480,7 +480,7 @@ export const generateBilling = async (req, res) => {
 
     const totalConsumableCost = consumables.reduce(
       (sum, item) => sum + item.totalCost,
-      0
+      0,
     );
     const totalAmount = sessionCharges + totalConsumableCost;
 
@@ -506,7 +506,7 @@ export const generateBilling = async (req, res) => {
     const driveLink = await uploadToDrive(
       pdfBuffer,
       fileName,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f",
     );
 
     res.status(201).json({
@@ -789,7 +789,7 @@ const updateInventoryUsage = async (session) => {
     }
     const bloodLineItemCode = bloodLineMapping[bloodLineType];
     console.log(
-      `Patient weight-based blood line: ${bloodLineType} → ${bloodLineItemCode}`
+      `Patient weight-based blood line: ${bloodLineType} → ${bloodLineItemCode}`,
     );
 
     // 3. HEPARIN CALCULATION
@@ -806,7 +806,7 @@ const updateInventoryUsage = async (session) => {
       heparinVialsUsed = Math.ceil(heparinUnitsUsed / 25000);
     }
     console.log(
-      `Heparin: ${heparinUnitsUsed} units = ${heparinVialsUsed} vials of ${heparinItemCode}`
+      `Heparin: ${heparinUnitsUsed} units = ${heparinVialsUsed} vials of ${heparinItemCode}`,
     );
 
     // 4. SALINE CALCULATION (based on patient weight and session duration)
@@ -822,7 +822,7 @@ const updateInventoryUsage = async (session) => {
       salineBottlesUsed = 1; // Average patients
     }
     console.log(
-      `Saline: ${patientWeight}kg patient, ${sessionDuration}min = ${salineBottlesUsed} bottles`
+      `Saline: ${patientWeight}kg patient, ${sessionDuration}min = ${salineBottlesUsed} bottles`,
     );
 
     // 5. DEFINE USAGE ITEMS
@@ -886,7 +886,7 @@ const updateInventoryUsage = async (session) => {
         // Check if enough stock
         if (inventoryItem.currentStock < item.quantity) {
           console.error(
-            `❌ Insufficient stock for ${item.itemName}: need ${item.quantity}, have ${inventoryItem.currentStock}`
+            `❌ Insufficient stock for ${item.itemName}: need ${item.quantity}, have ${inventoryItem.currentStock}`,
           );
 
           // Create critical alert
@@ -917,11 +917,11 @@ const updateInventoryUsage = async (session) => {
               },
             },
           },
-          { new: true }
+          { new: true },
         );
 
         console.log(
-          `✅ ${item.itemName}: -${item.quantity} → ${updateResult.currentStock} remaining`
+          `✅ ${item.itemName}: -${item.quantity} → ${updateResult.currentStock} remaining`,
         );
 
         // Check for low stock alert
@@ -972,7 +972,7 @@ export const getAllMachines = async (req, res) => {
     const machines = await DialysisMachine.find()
       .populate(
         "currentSession.sessionId",
-        "dialysisPatientId sessionStartTime"
+        "dialysisPatientId sessionStartTime",
       )
       .sort({ machineId: 1 });
 
@@ -1018,7 +1018,7 @@ export const getSessionDetails = async (req, res) => {
 
     const session = await DialysisSession.findById(sessionId).populate(
       "technicianNurse.id",
-      "name email"
+      "name email",
     );
 
     if (!session) {

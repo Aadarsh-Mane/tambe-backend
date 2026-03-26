@@ -214,7 +214,7 @@ export const getFollowups = async (req, res) => {
 
     // Find the specific admission record using the admissionId
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     // If the admission record does not have follow-ups
@@ -321,7 +321,7 @@ export const checkIn = async (req, res) => {
       latitude,
       longitude,
       BUILDING_COORDINATES.latitude,
-      BUILDING_COORDINATES.longitude
+      BUILDING_COORDINATES.longitude,
     );
 
     if (distance > ALLOWED_RADIUS) {
@@ -381,7 +381,7 @@ export const checkOut = async (req, res) => {
       latitude,
       longitude,
       BUILDING_COORDINATES.latitude,
-      BUILDING_COORDINATES.longitude
+      BUILDING_COORDINATES.longitude,
     );
 
     if (distance > ALLOWED_RADIUS) {
@@ -601,7 +601,7 @@ export const get2hrFollowups = async (req, res) => {
 
     // Find the specific admission record using the admissionId
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     // If the admission record does not have follow-ups
@@ -662,7 +662,7 @@ export const addTwoHrFollowUp = async (req, res) => {
 
     // Find the specific admission record by admission ID
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -761,7 +761,7 @@ export const addFourHrFollowUp = async (req, res) => {
 
     // Find the specific admission record by admission ID
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -833,7 +833,7 @@ export const getTwoHrFollowUps = async (req, res) => {
 
     // Find the specific admission record by admission ID
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -892,7 +892,7 @@ export const getFourHrFollowUps = async (req, res) => {
 
     // Find the specific admission record by admission ID
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -966,7 +966,7 @@ export const generate2HrFollowUpPDF = async (req, res) => {
     const htmlContent = generate2HrFollowUpHTML(
       patient,
       admission,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -978,7 +978,7 @@ export const generate2HrFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive (optional - configure folderId as needed)
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -1041,7 +1041,7 @@ export const generate4HrFollowUpPDF = async (req, res) => {
     const htmlContent = generate4HrFollowUpHTML(
       patient,
       admission,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -1053,7 +1053,7 @@ export const generate4HrFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -1119,7 +1119,7 @@ export const generateCombinedFollowUpPDF = async (req, res) => {
     const htmlContent = generateCombinedFollowUpHTML(
       patient,
       admission,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -1131,7 +1131,7 @@ export const generateCombinedFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -1759,7 +1759,7 @@ function generatePatientInfoTable(patient, admission) {
         <tr>
           <td><strong>Admission:</strong></td>
           <td>${new Date(admission.admissionDate).toLocaleDateString(
-            "en-IN"
+            "en-IN",
           )}</td>
           <td><strong>Section:</strong></td>
           <td>${admission.section?.name || "N/A"}</td>

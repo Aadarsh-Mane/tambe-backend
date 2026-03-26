@@ -294,13 +294,13 @@ export const addPatient = async (req, res) => {
         const lastDischarge = patientHistory.history
           .filter((entry) => entry.dischargeDate)
           .sort((a, b) =>
-            dayjs(b.dischargeDate).isBefore(a.dischargeDate) ? -1 : 1
+            dayjs(b.dischargeDate).isBefore(a.dischargeDate) ? -1 : 1,
           )[0];
 
         if (lastDischarge) {
           daysSinceLastAdmission = dayjs().diff(
             dayjs(lastDischarge.dischargeDate),
-            "day"
+            "day",
           );
         }
       }
@@ -803,7 +803,7 @@ export const generateBillForDischargedPatient = async (req, res) => {
         bedCharges,
         bedCategories,
         "ratePerDay",
-        "quantity"
+        "quantity",
       );
     }
 
@@ -817,7 +817,7 @@ export const generateBillForDischargedPatient = async (req, res) => {
         doctorCharges,
         doctorCategories,
         "ratePerVisit",
-        "visits"
+        "visits",
       );
     }
 
@@ -827,7 +827,7 @@ export const generateBillForDischargedPatient = async (req, res) => {
         procedureCharges,
         procedureCategories,
         "ratePerUnit",
-        "quantity"
+        "quantity",
       );
     }
 
@@ -837,7 +837,7 @@ export const generateBillForDischargedPatient = async (req, res) => {
         investigationCharges,
         investigationCategories,
         "ratePerTest",
-        "quantity"
+        "quantity",
       );
     }
 
@@ -1498,7 +1498,7 @@ export const getDoctorAdvice = async (req, res) => {
             <div class="details-row">
                 <p><strong>Contact:</strong> ${response.contact}</p>
                 <p><strong>Date:</strong> ${new Date(
-                  response.admissionDate
+                  response.admissionDate,
                 ).toLocaleDateString()}</p>
                 <p><strong>Doctor:</strong> ${response.doctor}</p>
             </div>
@@ -1519,9 +1519,9 @@ export const getDoctorAdvice = async (req, res) => {
                         <li>Pulse: ${vital.pulse} bpm</li>
                         <li>Other: ${vital.other}</li>
                         <li>Recorded At: ${new Date(
-                          vital.recordedAt
+                          vital.recordedAt,
                         ).toLocaleString()}</li>
-                    `
+                    `,
                       )
                       .join("")}
                 </ul>
@@ -1559,7 +1559,7 @@ export const getDoctorAdvice = async (req, res) => {
                                 <td>${prescription.duration}</td>
                                 <td>${prescription.frequency}</td>
                             </tr>
-                        `
+                        `,
                           )
                           .join("")}
                     </tbody>
@@ -1901,7 +1901,7 @@ export const getDoctorAdvic1 = async (req, res) => {
 
     // Find the admission record using the admissionId
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -2046,7 +2046,7 @@ export const getDoctorAdvic1 = async (req, res) => {
             <div class="details-row">
              <p><strong>Weight:</strong> ${response.weight} kg</p>
                 <p><strong>Date:</strong> ${new Date(
-                  response.admissionDate
+                  response.admissionDate,
                 ).toLocaleDateString()}</p>
                 <p><strong>Doctor:</strong> ${response.doctor}</p>
             </div>
@@ -2072,7 +2072,7 @@ export const getDoctorAdvic1 = async (req, res) => {
                         }</li>
                         <li>Other: ${response.latestVital.other || "N/A"}</li>
                         <li>Recorded At: ${new Date(
-                          response.latestVital.recordedAt
+                          response.latestVital.recordedAt,
                         ).toLocaleString()}</li>
                     `
                         : "<li>No vital signs recorded</li>"
@@ -2120,15 +2120,15 @@ export const getDoctorAdvic1 = async (req, res) => {
                                 <td>M: ${
                                   prescription.medicine.morning || "-"
                                 } / A: ${
-                                    prescription.medicine.afternoon || "-"
-                                  } / N: ${
-                                    prescription.medicine.night || "-"
-                                  }</td>
+                                  prescription.medicine.afternoon || "-"
+                                } / N: ${
+                                  prescription.medicine.night || "-"
+                                }</td>
                                 <td>${
                                   prescription.medicine.comment || "N/A"
                                 }</td>
                             </tr>
-                            `
+                            `,
                                 )
                                 .join("")
                             : '<tr><td colspan="3">No prescriptions recorded</td></tr>'
@@ -2147,7 +2147,7 @@ export const getDoctorAdvic1 = async (req, res) => {
     const driveLink = await uploadToDrive(
       pdfBuffer,
       `DoctorAdvice_${req.params.patientId}.pdf`,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy" // Folder ID
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f", // Folder ID
     );
 
     try {
@@ -2532,7 +2532,7 @@ export const dischargeByReception = async (req, res) => {
 
     // Find the specific admission record within the history array
     const admission = patientHistory.history.find(
-      (record) => record.admissionId.toString() === admissionId
+      (record) => record.admissionId.toString() === admissionId,
     );
 
     if (!admission) {
@@ -2704,7 +2704,7 @@ export const generateOPDBill = async (req, res) => {
     // Calculate totals
     const servicesSubTotal = Object.values(serviceCalculations).reduce(
       (sum, service) => sum + service.total,
-      0
+      0,
     );
 
     const subTotal =
@@ -2908,7 +2908,7 @@ export const generateOPDBill = async (req, res) => {
     console.log(
       `Generating OPD bill for patient ${patientId}, Bill No: ${billNumber}, OPD: ${opdNumber}, IPD: ${
         ipdNumber || "N/A"
-      }`
+      }`,
     );
 
     // Generate HTML and PDF with OPD/IPD numbers
@@ -2924,7 +2924,7 @@ export const generateOPDBill = async (req, res) => {
     let driveLink = null;
     if (uploadToDriveFlag) {
       const folderId =
-        process.env.OPD_BILLS_FOLDER_ID || "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+        process.env.OPD_BILLS_FOLDER_ID || "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
       try {
         driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
         console.log(`OPD bill uploaded to Drive: ${driveLink}`);
@@ -3563,7 +3563,7 @@ export const getAiSggestions = async (req, res) => {
 
     // Find the admission record by admissionId in the patient's admission records
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -3575,7 +3575,7 @@ export const getAiSggestions = async (req, res) => {
       (symptom) => {
         const parts = symptom.split(" - ");
         return parts.length > 1 ? parts[0] : parts[0]; // Remove date part
-      }
+      },
     );
 
     // Format vitals (remove line breaks and date from the 'other' field)
@@ -3686,7 +3686,7 @@ export const createAppointment = async (req, res) => {
         (appt) =>
           appt.doctorId === doctorId &&
           appt.status === "waiting" &&
-          !appt.rescheduledTo
+          !appt.rescheduledTo,
       );
 
       if (hasExistingPendingAppointment) {
@@ -3702,7 +3702,7 @@ export const createAppointment = async (req, res) => {
         (appt) =>
           appt.doctorId === doctorId &&
           (appt.status === "completed" ||
-            (appt.status === "rescheduled" && appt.rescheduledTo))
+            (appt.status === "rescheduled" && appt.rescheduledTo)),
       );
 
       if (!hasValidPreviousAppointment) {
@@ -3717,14 +3717,14 @@ export const createAppointment = async (req, res) => {
         (appt) =>
           appt.doctorId === doctorId &&
           appt.status === "rescheduled" &&
-          appt.rescheduledTo
+          appt.rescheduledTo,
       );
 
       // If there are rescheduled appointments, we'll mark them as handled
       if (rescheduledAppointments.length > 0) {
         // Sort by updatedAt to get the most recent rescheduled appointment
         rescheduledAppointments.sort(
-          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
         );
 
         // Add a field to indicate this new appointment is based on a rescheduled one
@@ -3794,7 +3794,7 @@ export const createAppointment = async (req, res) => {
           (appt) =>
             appt.doctorId === doctorId &&
             appt.status === "waiting" &&
-            !appt.rescheduledTo
+            !appt.rescheduledTo,
         );
 
         if (hasExistingPendingAppointment) {
@@ -3810,14 +3810,14 @@ export const createAppointment = async (req, res) => {
           (appt) =>
             appt.doctorId === doctorId &&
             appt.status === "rescheduled" &&
-            appt.rescheduledTo
+            appt.rescheduledTo,
         );
 
         // If there are rescheduled appointments, we'll mark them as handled
         if (rescheduledAppointments.length > 0) {
           // Sort by updatedAt to get the most recent rescheduled appointment
           rescheduledAppointments.sort(
-            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
           );
 
           // Add a field to indicate this new appointment is based on a rescheduled one
@@ -4024,7 +4024,7 @@ export const rescheduleAppointmentByReceptionist = async (req, res) => {
 
     // Find the specific appointment
     const appointmentIndex = patientRecord.appointments.findIndex(
-      (appt) => appt._id.toString() === appointmentId
+      (appt) => appt._id.toString() === appointmentId,
     );
 
     if (appointmentIndex === -1) {
@@ -4045,9 +4045,8 @@ export const rescheduleAppointmentByReceptionist = async (req, res) => {
 
     // Update the current appointment to "rescheduled" status
     patientRecord.appointments[appointmentIndex].status = "rescheduled";
-    patientRecord.appointments[
-      appointmentIndex
-    ].rescheduledTo = `${newDate} ${newTime}`;
+    patientRecord.appointments[appointmentIndex].rescheduledTo =
+      `${newDate} ${newTime}`;
 
     // Create a new appointment with the new date and time
     const newAppointment = {
@@ -4113,7 +4112,7 @@ export const getAllAppointments = async (req, res) => {
         rescheduledTo: appt.rescheduledTo,
         createdAt: appt.createdAt,
         updatedAt: appt.updatedAt,
-      }))
+      })),
     );
 
     res.status(200).json({ appointments: allAppointments });
@@ -4197,7 +4196,7 @@ export const admitPatientWithNotes = async (req, res) => {
 
     // Find the admission record in the patient document
     const admissionIndex = patient.admissionRecords.findIndex(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (admissionIndex === -1) {
@@ -4316,8 +4315,8 @@ export const assignBedToPatient = async (req, res) => {
     return next(
       new ErrorResponse(
         `Admission record not found with id ${admissionRecordId}`,
-        404
-      )
+        404,
+      ),
     );
   }
 
@@ -4462,7 +4461,7 @@ export const getAvailableBeds = async (req, res) => {
     const matchingRecords = patient.admissionRecords.filter(
       (record) =>
         record.section?.id?.toString() === sectionId &&
-        record.status === "admitted"
+        record.status === "admitted",
     );
 
     matchingRecords.forEach((record) => {
@@ -4882,7 +4881,7 @@ export const getPatientHistoryById = async (req, res) => {
 
         const lengthOfStay = Math.ceil(
           (admission.dischargeDate - admission.admissionDate) /
-            (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24),
         );
         acc.totalDays += lengthOfStay;
         acc.averageLengthOfStay = acc.totalDays / acc.totalAdmissions;
@@ -4895,7 +4894,7 @@ export const getPatientHistoryById = async (req, res) => {
         totalDays: 0,
         averageAmount: 0,
         averageLengthOfStay: 0,
-      }
+      },
     );
 
     res.status(200).json({
@@ -4949,7 +4948,7 @@ export const getAllPatientAmountDetails = async (req, res) => {
             (total, record) => {
               return total + (record.amountToBePayed || 0);
             },
-            0
+            0,
           );
         }
 
@@ -4977,30 +4976,30 @@ export const getAllPatientAmountDetails = async (req, res) => {
           currentAdmissionAmount: currentAdmissionAmount,
           hasOutstandingBalance: patient.pendingAmount > 0,
         };
-      })
+      }),
     );
 
     // Sort by pending amount (highest first) to prioritize patients with outstanding balances
     const sortedPatients = allPatientAmountDetails.sort(
-      (a, b) => b.currentPendingAmount - a.currentPendingAmount
+      (a, b) => b.currentPendingAmount - a.currentPendingAmount,
     );
 
     // Calculate summary statistics
     const summary = {
       totalPatients: patients.length,
       patientsWithOutstandingBalance: sortedPatients.filter(
-        (p) => p.hasOutstandingBalance
+        (p) => p.hasOutstandingBalance,
       ).length,
       currentlyAdmittedPatients: sortedPatients.filter(
-        (p) => p.isCurrentlyAdmitted
+        (p) => p.isCurrentlyAdmitted,
       ).length,
       totalOutstandingAmount: sortedPatients.reduce(
         (total, patient) => total + patient.currentPendingAmount,
-        0
+        0,
       ),
       totalHistoricalAmount: sortedPatients.reduce(
         (total, patient) => total + patient.totalHistoricalAmount,
-        0
+        0,
       ),
     };
 
@@ -5117,7 +5116,7 @@ export const getAllPatientAmountDetailsWithBilling = async (req, res) => {
             (total, record) => {
               return total + (record.amountToBePayed || 0);
             },
-            0
+            0,
           );
         }
 
@@ -5152,34 +5151,34 @@ export const getAllPatientAmountDetailsWithBilling = async (req, res) => {
           hasOutstandingBalance: patient.pendingAmount > 0,
           totalBillingRecords: billingRecords.length,
         };
-      })
+      }),
     );
 
     // Sort by pending amount (highest first)
     const sortedPatients = allPatientAmountDetails.sort(
-      (a, b) => b.currentPendingAmount - a.currentPendingAmount
+      (a, b) => b.currentPendingAmount - a.currentPendingAmount,
     );
 
     // Calculate summary statistics
     const summary = {
       totalPatients: patients.length,
       patientsWithOutstandingBalance: sortedPatients.filter(
-        (p) => p.hasOutstandingBalance
+        (p) => p.hasOutstandingBalance,
       ).length,
       currentlyAdmittedPatients: sortedPatients.filter(
-        (p) => p.isCurrentlyAdmitted
+        (p) => p.isCurrentlyAdmitted,
       ).length,
       totalOutstandingAmount: sortedPatients.reduce(
         (total, patient) => total + patient.currentPendingAmount,
-        0
+        0,
       ),
       totalHistoricalAmount: sortedPatients.reduce(
         (total, patient) => total + patient.totalHistoricalAmount,
-        0
+        0,
       ),
       totalBillingAmount: sortedPatients.reduce(
         (total, patient) => total + patient.totalBillingAmount,
-        0
+        0,
       ),
     };
 
@@ -5231,14 +5230,14 @@ export const generateDischargeSummary = async (req, res) => {
 
     // Log summary generation request
     console.log(
-      `Generating discharge summary for patient ${patientId}, latest admission ${admissionId}`
+      `Generating discharge summary for patient ${patientId}, latest admission ${admissionId}`,
     );
 
     // Generate HTML content for discharge summary
     const htmlContent = generateDischargeSummaryHTML(
       patientHistory,
       admissionHistory,
-      { includeReports: includeReports === "true", template }
+      { includeReports: includeReports === "true", template },
     );
 
     // Generate PDF with optimized settings
@@ -5250,7 +5249,7 @@ export const generateDischargeSummary = async (req, res) => {
     const fileName = `Discharge_Summary_${sanitizedName}_${timestamp}.pdf`;
 
     // Upload to Google Drive (optional)
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     let driveLink = null;
 
     if (folderId) {
@@ -5267,7 +5266,7 @@ export const generateDischargeSummary = async (req, res) => {
     const admissionDate = new Date(admissionHistory.admissionDate);
     const dischargeDate = new Date(admissionHistory.dischargeDate);
     const lengthOfStay = Math.ceil(
-      (dischargeDate - admissionDate) / (1000 * 60 * 60 * 24)
+      (dischargeDate - admissionDate) / (1000 * 60 * 60 * 24),
     );
 
     // Return JSON response with PDF link and data
@@ -5353,7 +5352,7 @@ export const generateIpdBill = async (req, res) => {
     const admissionDate = new Date(admissionHistory.admissionDate);
     const dischargeDate = new Date(admissionHistory.dischargeDate);
     const lengthOfStay = Math.ceil(
-      (dischargeDate - admissionDate) / (1000 * 60 * 60 * 24)
+      (dischargeDate - admissionDate) / (1000 * 60 * 60 * 24),
     );
 
     // Process charges and calculate totals
@@ -5376,7 +5375,7 @@ export const generateIpdBill = async (req, res) => {
       allCharges,
       billCalculations,
       lengthOfStay,
-      billCounter
+      billCounter,
     );
 
     // Generate PDF
@@ -5390,7 +5389,7 @@ export const generateIpdBill = async (req, res) => {
     }_${timestamp}.pdf`;
 
     // Upload to Google Drive (optional)
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"; // Replace with your folder ID
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f"; // Replace with your folder ID
     let driveLink = null;
 
     if (folderId) {
@@ -5483,14 +5482,14 @@ export const generateIpdBill = async (req, res) => {
         advance >= billCalculations.finalAmount
           ? "Paid"
           : advance > 0
-          ? "Partial"
-          : "Pending",
+            ? "Partial"
+            : "Pending",
     };
 
     console.log(
       `IPD Bill generated (not stored): ${billNumber} for patient ${patientId}, OPD: ${opdNumber}, IPD: ${
         ipdNumber || "N/A"
-      }`
+      }`,
     );
 
     // Return JSON response with bill data including OPD/IPD numbers + billData for storage
@@ -5635,7 +5634,7 @@ function processCustomCharges(customCharges) {
 
         const key = `custom_${index}_${charge.description.replace(
           /[^a-zA-Z0-9]/g,
-          "_"
+          "_",
         )}`;
 
         processedCustomCharges[key] = {
@@ -5755,7 +5754,7 @@ export const storeIpdBill = async (req, res) => {
     await billRecord.save();
 
     console.log(
-      `IPD Bill stored successfully: ${billData.billNumber} for patient ${billData.patient.patientId}`
+      `IPD Bill stored successfully: ${billData.billNumber} for patient ${billData.patient.patientId}`,
     );
 
     // Return success response
@@ -5859,7 +5858,7 @@ export const getLatestPatientRecord = async (req, res) => {
             ? Math.ceil(
                 (new Date(latestRecord.dischargeDate) -
                   new Date(latestRecord.admissionDate)) /
-                  (1000 * 60 * 60 * 24)
+                  (1000 * 60 * 60 * 24),
               )
             : null,
         // Add summary counts
@@ -5956,7 +5955,7 @@ export const generateManualDischargeSummary = async (req, res) => {
         ([key, value]) =>
           !value ||
           (Array.isArray(value) && value.length === 0) ||
-          (typeof value === "string" && value.trim() === "")
+          (typeof value === "string" && value.trim() === ""),
       )
       .map(([key]) => key);
 
@@ -6107,7 +6106,7 @@ export const generateManualDischargeSummary = async (req, res) => {
     if (uploadToDriveFlag) {
       const folderId =
         process.env.DISCHARGE_SUMMARY_FOLDER_ID ||
-        "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+        "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
       try {
         driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
         await DischargeSummary.create({
@@ -6280,7 +6279,7 @@ export const createDepositReceipt = async (req, res) => {
 
     // Find the specific admission record
     const admission = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admission) {
@@ -6299,7 +6298,7 @@ export const createDepositReceipt = async (req, res) => {
     // Calculate total deposits made so far
     const totalPreviousDeposits = existingDeposits.reduce(
       (sum, receipt) => sum + receipt.depositDetails.depositAmount,
-      0
+      0,
     );
 
     console.log(`Previous deposits for admission ${admissionId}:`, {
@@ -6320,7 +6319,7 @@ export const createDepositReceipt = async (req, res) => {
     const istDate = new Date(
       new Date().toLocaleString("en-US", {
         timeZone: "Asia/Kolkata",
-      })
+      }),
     );
 
     // Prepare deposit receipt data
@@ -6379,7 +6378,7 @@ export const createDepositReceipt = async (req, res) => {
 
     console.log(
       "Patient numbers being set:",
-      depositReceiptData.patientNumbers
+      depositReceiptData.patientNumbers,
     );
 
     // Create deposit receipt in database
@@ -6420,10 +6419,10 @@ export const createDepositReceipt = async (req, res) => {
         sequenceNumber === 1
           ? "st"
           : sequenceNumber === 2
-          ? "nd"
-          : sequenceNumber === 3
-          ? "rd"
-          : "th"
+            ? "nd"
+            : sequenceNumber === 3
+              ? "rd"
+              : "th"
       } deposit)`,
       data: {
         receiptId,
@@ -6464,7 +6463,7 @@ export const getDepositHistory = async (req, res) => {
 
     const totalAmount = deposits.reduce(
       (sum, deposit) => sum + deposit.depositDetails.depositAmount,
-      0
+      0,
     );
 
     res.json({
@@ -6646,7 +6645,7 @@ export const getDepositSummaryDashboard = async (req, res) => {
           .sort({ "receiptDetails.generatedAt": -1 })
           .limit(10)
           .select(
-            "receiptId patientId patientDetails.name depositDetails.depositAmount depositDetails.paymentMethod receiptDetails.generatedAt"
+            "receiptId patientId patientDetails.name depositDetails.depositAmount depositDetails.paymentMethod receiptDetails.generatedAt",
           )
           .lean(),
 
@@ -6732,7 +6731,7 @@ export const getDepositSummaryDashboard = async (req, res) => {
           generatedAt: deposit.receiptDetails.generatedAt,
           daysAgo: Math.ceil(
             (new Date() - new Date(deposit.receiptDetails.generatedAt)) /
-              (1000 * 60 * 60 * 24)
+              (1000 * 60 * 60 * 24),
           ),
         })),
         topDoctors: topDoctors.map((doctor) => ({
@@ -6861,7 +6860,7 @@ export const exportDepositReceipts = async (req, res) => {
       deposit.patientDetails.age,
       deposit.patientDetails.gender,
       new Date(deposit.admissionDetails.admissionDate).toLocaleDateString(
-        "en-IN"
+        "en-IN",
       ),
       deposit.admissionDetails.doctorName,
       deposit.admissionDetails.sectionName || "",
@@ -6879,7 +6878,7 @@ export const exportDepositReceipts = async (req, res) => {
     // Combine headers and rows
     const csvContent = [csvHeaders, ...csvRows]
       .map((row) =>
-        row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(",")
+        row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(","),
       )
       .join("\n");
 
@@ -6923,7 +6922,7 @@ export const getAdmissionDepositSummary = async (req, res) => {
 
     const totalAmount = deposits.reduce(
       (sum, deposit) => sum + deposit.depositDetails.depositAmount,
-      0
+      0,
     );
 
     res.json({
@@ -6983,12 +6982,12 @@ export const getAllPatientsDeposits = async (req, res) => {
       matchConditions["receiptDetails.generatedAt"] = {};
       if (startDate) {
         matchConditions["receiptDetails.generatedAt"]["$gte"] = new Date(
-          startDate
+          startDate,
         );
       }
       if (endDate) {
         matchConditions["receiptDetails.generatedAt"]["$lte"] = new Date(
-          endDate
+          endDate,
         );
       }
     }
@@ -7289,7 +7288,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: `Invalid report types: ${invalidTypes.join(
-          ", "
+          ", ",
         )}. Available types: ${Object.keys(availableReports).join(", ")}`,
       });
     }
@@ -7308,7 +7307,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateSymptomsHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Symptoms_${Date.now()}.pdf`;
             break;
@@ -7317,7 +7316,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateVitalsHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Vitals_${Date.now()}.pdf`;
             break;
@@ -7326,7 +7325,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateDiagnosisHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Diagnosis_${Date.now()}.pdf`;
             break;
@@ -7335,7 +7334,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generatePrescriptionsHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Prescriptions_${Date.now()}.pdf`;
             break;
@@ -7344,7 +7343,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateConsultingHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Consulting_${Date.now()}.pdf`;
             break;
@@ -7353,7 +7352,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateDoctorNotesHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_DoctorNotes_${Date.now()}.pdf`;
             break;
@@ -7362,7 +7361,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
             htmlContent = generateSurgicalHTML(
               patientHistory,
               latestRecord,
-              hospital
+              hospital,
             );
             fileName = `${patientId}_Surgical_${Date.now()}.pdf`;
             break;
@@ -7380,7 +7379,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
               htmlContent = generate2HrFollowUpHTML(
                 patientData,
                 admissionData,
-                hospital.bannerImageUrl
+                hospital.bannerImageUrl,
               );
               fileName = `${patientId}_2Hr_FollowUp_${Date.now()}.pdf`;
             }
@@ -7399,7 +7398,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
               htmlContent = generate4HrFollowUpHTML(
                 patientData,
                 admissionData,
-                hospital.bannerImageUrl
+                hospital.bannerImageUrl,
               );
               fileName = `${patientId}_4Hr_FollowUp_${Date.now()}.pdf`;
             }
@@ -7421,7 +7420,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
               htmlContent = generateCombinedFollowUpHTML(
                 patientData,
                 admissionData,
-                hospital.bannerImageUrl
+                hospital.bannerImageUrl,
               );
               fileName = `${patientId}_Combined_FollowUp_${Date.now()}.pdf`;
             }
@@ -7436,7 +7435,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
               htmlContent = generateVitalsGraphHTML(
                 patientHistory,
                 latestRecord,
-                hospital
+                hospital,
               );
               fileName = `${patientId}_VitalsGraph_${Date.now()}.pdf`;
             }
@@ -7450,7 +7449,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
         const driveLink = await uploadToDrive(
           pdfBuffer,
           fileName,
-          hospital.folderId
+          hospital.folderId,
         );
 
         generatedPDFs.push({
@@ -7475,7 +7474,7 @@ export const generatePatientRecordPDFs = async (req, res) => {
         ? Math.ceil(
             (new Date(latestRecord.dischargeDate) -
               new Date(latestRecord.admissionDate)) /
-              (1000 * 60 * 60 * 24)
+              (1000 * 60 * 60 * 24),
           )
         : null;
 
@@ -7583,7 +7582,7 @@ export const generateMedicalSurgeryReport = async (req, res) => {
     const htmlContent = generateCompleteSurgicalReportHTML(
       patientData,
       surgicalNotes,
-      latestHistoryRecord
+      latestHistoryRecord,
     );
 
     // Generate PDF
@@ -7601,7 +7600,7 @@ export const generateMedicalSurgeryReport = async (req, res) => {
         driveLink = await uploadToDrive(
           pdfBuffer,
           fileName,
-          uploadToDriveFolder
+          uploadToDriveFolder,
         );
       }
 
@@ -7711,7 +7710,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
     const activePatients = await patientSchema
       .find(query)
       .select(
-        "patientId name age gender contact address admissionRecords pendingAmount imageUrl"
+        "patientId name age gender contact address admissionRecords pendingAmount imageUrl",
       )
       .skip(skip)
       .limit(parseInt(limit))
@@ -7725,7 +7724,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
         const currentAdmission = patient.admissionRecords
           .filter((admission) => !admission.dischargeDate) // Not discharged
           .sort(
-            (a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)
+            (a, b) => new Date(b.admissionDate) - new Date(a.admissionDate),
           )[0];
 
         if (!currentAdmission) {
@@ -7745,7 +7744,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
               admissionId: currentAdmission._id,
             }).populate(
               "insurancePolicyId",
-              "insuranceProvider policyNumber policyType sumInsured sumInsuredRemaining verificationStatus"
+              "insuranceProvider policyNumber policyType sumInsured sumInsuredRemaining verificationStatus",
             );
 
             if (patientInsurance) {
@@ -7769,7 +7768,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
             console.log(
               "Error fetching insurance for patient:",
               patient.patientId,
-              error.message
+              error.message,
             );
           }
         }
@@ -7792,7 +7791,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
           },
           insuranceInfo: insuranceInfo || { hasInsurance: false },
         };
-      })
+      }),
     );
 
     // Apply insurance filter if requested
@@ -7800,7 +7799,7 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
     if (hasInsurance !== undefined) {
       const hasInsuranceBool = hasInsurance === "true";
       filteredPatients = enrichedPatients.filter(
-        (patient) => patient.insuranceInfo.hasInsurance === hasInsuranceBool
+        (patient) => patient.insuranceInfo.hasInsurance === hasInsuranceBool,
       );
     }
 
@@ -7811,18 +7810,18 @@ export const getActivePatientsWithAdmissions = async (req, res) => {
     const summary = {
       totalActivePatients: filteredPatients.length,
       withInsurance: filteredPatients.filter(
-        (p) => p.insuranceInfo.hasInsurance
+        (p) => p.insuranceInfo.hasInsurance,
       ).length,
       withoutInsurance: filteredPatients.filter(
-        (p) => !p.insuranceInfo.hasInsurance
+        (p) => !p.insuranceInfo.hasInsurance,
       ).length,
       ipdPatients: filteredPatients.filter((p) => p.currentAdmission?.ipdNumber)
         .length,
       opdPatients: filteredPatients.filter(
-        (p) => p.currentAdmission?.opdNumber && !p.currentAdmission?.ipdNumber
+        (p) => p.currentAdmission?.opdNumber && !p.currentAdmission?.ipdNumber,
       ).length,
       emergencyPatients: filteredPatients.filter(
-        (p) => p.currentAdmission?.patientType === "Emergency"
+        (p) => p.currentAdmission?.patientType === "Emergency",
       ).length,
     };
 
@@ -7921,7 +7920,7 @@ export const generate2HrFollowUpPDF = async (req, res) => {
     const htmlContent = generate2HrFollowUpHTML(
       patientData,
       admissionData,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -7933,7 +7932,7 @@ export const generate2HrFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive (optional - configure folderId as needed)
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -8027,7 +8026,7 @@ export const generate4HrFollowUpPDF = async (req, res) => {
     const htmlContent = generate4HrFollowUpHTML(
       patientData,
       admissionData,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -8039,7 +8038,7 @@ export const generate4HrFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -8136,7 +8135,7 @@ export const generateCombinedFollowUpPDF = async (req, res) => {
     const htmlContent = generateCombinedFollowUpHTML(
       patientData,
       admissionData,
-      bannerImageUrl
+      bannerImageUrl,
     );
 
     // Generate PDF
@@ -8148,7 +8147,7 @@ export const generateCombinedFollowUpPDF = async (req, res) => {
     }_${new Date().toISOString().split("T")[0]}.pdf`;
 
     // Upload to Google Drive
-    const folderId = "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+    const folderId = "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
     const driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
 
     res.status(200).json({
@@ -8778,7 +8777,7 @@ function generatePatientInfoTable(patient, admission) {
         <tr>
           <td><strong>Admission:</strong></td>
           <td>${new Date(admission.admissionDate).toLocaleDateString(
-            "en-IN"
+            "en-IN",
           )}</td>
           <td><strong>Section:</strong></td>
           <td>${admission.section?.name || "N/A"}</td>

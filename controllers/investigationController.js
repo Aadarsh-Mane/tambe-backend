@@ -97,7 +97,8 @@ export const getAllInvestigations = async (req, res) => {
     const enhancedInvestigations = investigations.map((investigation) => {
       // Calculate days elapsed since order date
       const daysSinceOrdered = Math.floor(
-        (new Date() - new Date(investigation.orderDate)) / (1000 * 60 * 60 * 24)
+        (new Date() - new Date(investigation.orderDate)) /
+          (1000 * 60 * 60 * 24),
       );
 
       // Determine if the investigation is overdue based on priority and status
@@ -218,7 +219,7 @@ export const uploadInvestigationReport = async (req, res) => {
     const fileUrl = await uploadToDrive(
       req.file.buffer,
       fileName,
-      "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy"
+      "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f",
     );
 
     // Create attachment object
@@ -352,7 +353,7 @@ export const getInvestigationDetails = async (req, res) => {
     // Find the investigation
     const investigation = await Investigation.findById(id).populate(
       "patientId",
-      "name age gender"
+      "name age gender",
     );
 
     if (!investigation) {

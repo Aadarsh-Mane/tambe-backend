@@ -524,7 +524,7 @@ export const getPendingPatientsStats = async (req, res) => {
         acc[type] = (acc[type] || 0) + 1;
         return acc;
       },
-      {}
+      {},
     );
 
     res.status(200).json({
@@ -744,7 +744,7 @@ export const updateDoctorProfile = async (req, res) => {
       .findByIdAndUpdate(
         doctorId,
         { $set: updateFields },
-        { new: true, runValidators: true } // Return the updated document and run schema validators
+        { new: true, runValidators: true }, // Return the updated document and run schema validators
       )
       .select("-password"); // Exclude the password field from the response
 
@@ -844,7 +844,7 @@ export const admitPatientByDoctor = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -921,7 +921,7 @@ export const getAdmittedPatientsByDoctor = async (req, res) => {
         (record) =>
           record.doctor &&
           record.doctor.id.toString() === doctorId &&
-          record.status === "admitted"
+          record.status === "admitted",
       );
       return { ...patient.toObject(), admissionRecords: relevantAdmissions };
     });
@@ -1127,7 +1127,7 @@ export const dischargePatient = async (req, res) => {
     const admissionIndex = patient.admissionRecords.findIndex(
       (admission) =>
         admission._id.toString() === admissionId &&
-        admission.doctor.id.toString() === doctorId
+        admission.doctor.id.toString() === doctorId,
     );
 
     if (admissionIndex === -1) {
@@ -1144,7 +1144,7 @@ export const dischargePatient = async (req, res) => {
     // Extract the admission record
     const [admissionRecord] = patient.admissionRecords.splice(
       admissionIndex,
-      1
+      1,
     );
 
     // Check if this was the patient's last admission
@@ -1185,7 +1185,7 @@ export const dischargePatient = async (req, res) => {
     const fourHrFollowUpSchema = admissionRecord.fourHrFollowUpSchema.map(
       (followUp) => ({
         ...followUp.toObject(),
-      })
+      }),
     );
 
     const doctorNotes =
@@ -1696,7 +1696,7 @@ export const getAllDoctorsProfiles = async (req, res) => {
 // Mock notification function
 const notifyDoctor = (doctorId, patientId, admissionRecord) => {
   console.log(
-    `Doctor ${doctorId} notified: Patient ${patientId} discharged from admission on ${admissionRecord.admissionDate}`
+    `Doctor ${doctorId} notified: Patient ${patientId} discharged from admission on ${admissionRecord.admissionDate}`,
   );
 };
 export const getDischargedPatientsByDoctor = async (req, res) => {
@@ -1830,7 +1830,7 @@ export const fetchConsultant = async (req, res) => {
 
     // Find the admission record with the specified ID
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord || !admissionRecord.doctorConsultant) {
@@ -1881,7 +1881,7 @@ export const suggestions = (req, res) => {
 
     // Filter and return only the medicine names that match the query
     const suggestions = Object.values(data).filter(
-      (item) => typeof item === "string" && item.toLowerCase().includes(query)
+      (item) => typeof item === "string" && item.toLowerCase().includes(query),
     );
 
     console.log(suggestions); // Log to verify the suggestions
@@ -1962,7 +1962,7 @@ export const addSymptomsByDoctor = async (req, res) => {
     const patient = await patientSchema.findOneAndUpdate(
       { patientId, "admissionRecords._id": admissionId }, // Matching patient and admission record
       { $push: { "admissionRecords.$.symptomsByDoctor": { $each: symptoms } } }, // Pushing symptoms to the specific admission
-      { new: true }
+      { new: true },
     );
 
     if (!patient) {
@@ -1997,7 +1997,7 @@ export const fetchSymptoms = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -2026,7 +2026,7 @@ export const addVitals = async (req, res) => {
     const patient = await patientSchema.findOneAndUpdate(
       { patientId, "admissionRecords._id": admissionId }, // Matching patient and admission record
       { $push: { "admissionRecords.$.vitals": vitals } }, // Pushing vitals to the specific admission
-      { new: true }
+      { new: true },
     );
 
     if (!patient) {
@@ -2061,7 +2061,7 @@ export const fetchVitals = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -2092,7 +2092,7 @@ export const addDiagnosisByDoctor = async (req, res) => {
       {
         $push: { "admissionRecords.$.diagnosisByDoctor": { $each: diagnosis } },
       }, // Pushing diagnosis to the specific admission
-      { new: true }
+      { new: true },
     );
 
     if (!patient) {
@@ -2128,7 +2128,7 @@ export const fetchDiagnosis = async (req, res) => {
 
     // Locate the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -2194,7 +2194,7 @@ export const updateConditionAtDischarge = async (req, res) => {
           "admissionRecords.$.amountToBePayed": amountToBePayed,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!patient) {
@@ -2294,7 +2294,7 @@ export const deleteDoctorConsultant = async (req, res) => {
 
     // Find index of the consultant entry
     const index = admission.doctorConsulting.findIndex(
-      (doc) => doc._id.toString() === consultantId
+      (doc) => doc._id.toString() === consultantId,
     );
 
     if (index === -1) {
@@ -2374,7 +2374,7 @@ export const getPatientHistory1 = async (req, res) => {
       { patientId },
       {
         "history.followUps": 0, // Exclude follow-ups from the result
-      }
+      },
     );
 
     // Check if history exists for the patient
@@ -2411,7 +2411,7 @@ export const askQuestion = async (req, res) => {
 
     // Identify the patient mentioned in the question
     const patient = patients.find((p) =>
-      question.toLowerCase().includes(p.name.toLowerCase())
+      question.toLowerCase().includes(p.name.toLowerCase()),
     );
 
     if (!patient) {
@@ -2434,7 +2434,7 @@ export const askQuestion = async (req, res) => {
     - Night: ${med.night}
     - Comment: ${med.comment}
     - Prescribed Date: ${new Date(med.date).toLocaleDateString()}`;
-          }
+          },
         );
 
         return `\n  Admission ${index + 1}:
@@ -2510,7 +2510,7 @@ export const deletedPrescription = async (req, res) => {
           "admissionRecords.$.doctorPrescriptions": { _id: prescriptionId },
         }, // Remove the prescription
       },
-      { new: true } // Return the updated document
+      { new: true }, // Return the updated document
     );
 
     if (!updatedPatient) {
@@ -2546,7 +2546,7 @@ export const deletedVitals = async (req, res) => {
           "admissionRecords.$.vitals": { _id: vitalsId },
         }, // Remove the prescription
       },
-      { new: true } // Return the updated document
+      { new: true }, // Return the updated document
     );
 
     if (!updatedPatient) {
@@ -2627,7 +2627,7 @@ export const getPatientSuggestions = async (req, res) => {
         age: 1,
         gender: 1,
         admissionRecords: 1, // Get the full admission record
-      }
+      },
     );
 
     if (!patient || patient.admissionRecords.length === 0) {
@@ -2664,7 +2664,7 @@ export const getDiagnosis = async (req, res) => {
 
     // Fetch patient data
     const { data } = await axios.get(
-      `https://bhosale.mattresswala.org/doctors/getPatientSuggestion/${patientId}`
+      `https://bhosale.mattresswala.org/doctors/getPatientSuggestion/${patientId}`,
     );
     console.log("hello:", data);
 
@@ -2732,7 +2732,7 @@ export const deleteSymptom = async (req, res) => {
           "admissionRecords.$.symptomsByDoctor": symptom, // Remove the specific symptom
         },
       },
-      { new: true } // Return the updated document
+      { new: true }, // Return the updated document
     );
 
     if (!updatedPatient) {
@@ -2768,7 +2768,7 @@ export const deleteDiagnosis = async (req, res) => {
       {
         new: true,
         arrayFilters: [{ "record._id": admissionId }],
-      }
+      },
     );
 
     if (!updatedPatient) {
@@ -2856,7 +2856,7 @@ export const deleteNote = async (req, res) => {
 
     // Find the index of the note to be deleted
     const noteIndex = admissionRecord.doctorNotes.findIndex(
-      (note) => note._id.toString() === noteId
+      (note) => note._id.toString() === noteId,
     );
 
     if (noteIndex === -1) {
@@ -2935,7 +2935,7 @@ export const addDoctorTreatment = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -3011,7 +3011,7 @@ export const getDoctorTreatment = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -3036,7 +3036,7 @@ export const getDoctorTreatment = async (req, res) => {
           ...medication.toObject(),
           nurseName,
         };
-      })
+      }),
     );
 
     // Add nurse names to IV fluids
@@ -3047,7 +3047,7 @@ export const getDoctorTreatment = async (req, res) => {
           ...ivFluid.toObject(),
           nurseName,
         };
-      })
+      }),
     );
 
     // Add nurse names to procedures
@@ -3058,7 +3058,7 @@ export const getDoctorTreatment = async (req, res) => {
           ...procedure.toObject(),
           nurseName,
         };
-      })
+      }),
     );
     const specialInstructions = await Promise.all(
       (admissionRecord.specialInstructions || []).map(async (instruction) => {
@@ -3067,7 +3067,7 @@ export const getDoctorTreatment = async (req, res) => {
           ...instruction.toObject(),
           nurseName,
         };
-      })
+      }),
     );
     const response = {
       medications,
@@ -3097,7 +3097,7 @@ export const deleteDoctorTreatment = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -3118,7 +3118,7 @@ export const deleteDoctorTreatment = async (req, res) => {
 
     // Remove the specific treatment item
     admissionRecord[treatmentType] = admissionRecord[treatmentType].filter(
-      (item) => item._id.toString() !== treatmentId
+      (item) => item._id.toString() !== treatmentId,
     );
 
     // Save the updated patient document
@@ -3168,13 +3168,13 @@ export const getDoctorAppointments = async (req, res) => {
     patientAppointments.forEach((patient) => {
       // Filter to only this doctor's appointments
       const doctorAppointments = patient.appointments.filter(
-        (appt) => appt.doctorId === doctorId
+        (appt) => appt.doctorId === doctorId,
       );
 
       if (doctorAppointments.length > 0) {
         // Sort by createdAt date (newest first)
         doctorAppointments.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
         );
 
         // The first one after sorting is the latest
@@ -3323,7 +3323,7 @@ export const updateAppointmentStatus = async (req, res) => {
     if (
       !status ||
       !["accepted", "canceled", "completed", "rescheduled", "no-show"].includes(
-        status
+        status,
       )
     ) {
       return res.status(400).json({ message: "Valid status is required" });
@@ -3345,7 +3345,7 @@ export const updateAppointmentStatus = async (req, res) => {
 
     // Find the specific appointment
     const appointmentIndex = patientRecord.appointments.findIndex(
-      (appt) => appt._id.toString() === appointmentId
+      (appt) => appt._id.toString() === appointmentId,
     );
 
     if (appointmentIndex === -1) {
@@ -3361,9 +3361,8 @@ export const updateAppointmentStatus = async (req, res) => {
     // BUT do not create a new appointment (as per your requirement)
     if (status === "rescheduled") {
       // Just store the rescheduled info in the existing appointment
-      patientRecord.appointments[
-        appointmentIndex
-      ].rescheduledTo = `${rescheduledDate} ${rescheduledTime}`;
+      patientRecord.appointments[appointmentIndex].rescheduledTo =
+        `${rescheduledDate} ${rescheduledTime}`;
 
       // Note: We're NOT creating a new appointment here
       // New appointments will only be created when the receptionist handles the rescheduling
@@ -3892,7 +3891,7 @@ export const getSymptomAnalytics = async (req, res) => {
       ([name, count]) => ({
         name,
         count,
-      })
+      }),
     );
 
     // Sort by count (most frequent first)
@@ -3944,7 +3943,7 @@ export const getCoOccurringSymptoms = async (req, res) => {
 
       // Extract symptom names
       const symptomNames = symptoms.map((symptomWithTimestamp) =>
-        extractSymptomName(symptomWithTimestamp)
+        extractSymptomName(symptomWithTimestamp),
       );
 
       // Generate all unique pairs of symptoms
@@ -4658,7 +4657,7 @@ export const createInvestigation = async (req, res) => {
     // If admissionId is provided, verify it exists for this patient
     if (admissionId) {
       const admissionExists = patient.admissionRecords.some(
-        (record) => record._id.toString() === admissionId
+        (record) => record._id.toString() === admissionId,
       );
 
       if (!admissionExists) {
@@ -4761,7 +4760,7 @@ export const createInvestigation = async (req, res) => {
     // Add a doctor note to the admission record about the investigation if admissionId is provided
     if (admissionId) {
       const admissionIndex = patient.admissionRecords.findIndex(
-        (record) => record._id.toString() === admissionId
+        (record) => record._id.toString() === admissionId,
       );
 
       if (admissionIndex !== -1) {
@@ -4938,7 +4937,8 @@ export const getDoctorInvestigations = async (req, res) => {
     const enhancedInvestigations = investigations.map((investigation) => {
       // Calculate days elapsed since order
       const daysSinceOrdered = Math.floor(
-        (new Date() - new Date(investigation.orderDate)) / (1000 * 60 * 60 * 24)
+        (new Date() - new Date(investigation.orderDate)) /
+          (1000 * 60 * 60 * 24),
       );
 
       // Determine if investigation is overdue based on priority
@@ -5028,7 +5028,8 @@ export const getPatientInvestigationsByAdmission = async (req, res) => {
     // Enhance the investigations data
     const enhancedInvestigations = investigations.map((investigation) => {
       const daysSinceOrdered = Math.floor(
-        (new Date() - new Date(investigation.orderDate)) / (1000 * 60 * 60 * 24)
+        (new Date() - new Date(investigation.orderDate)) /
+          (1000 * 60 * 60 * 24),
       );
 
       let isOverdue = false;
@@ -5193,7 +5194,7 @@ export const doctorBulkApproveEmergencyMedications = async (req, res) => {
 
           if (patient) {
             const admissionIndex = patient.admissionRecords.findIndex(
-              (record) => record._id.toString() === admissionId
+              (record) => record._id.toString() === admissionId,
             );
 
             if (admissionIndex !== -1) {
@@ -5306,7 +5307,7 @@ export const getPatientAdmissionDetails = async (req, res, next) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -5355,30 +5356,30 @@ export const getPatientAdmissionDetails = async (req, res, next) => {
           ? Math.ceil(
               (new Date(admissionRecord.dischargeDate) -
                 new Date(admissionRecord.admissionDate)) /
-                (1000 * 60 * 60 * 24)
+                (1000 * 60 * 60 * 24),
             )
           : Math.ceil(
               (new Date() - new Date(admissionRecord.admissionDate)) /
-                (1000 * 60 * 60 * 24)
+                (1000 * 60 * 60 * 24),
             ),
 
         // Get pending tasks summary
         pendingTasks: {
           medications:
             admissionRecord.medications?.filter(
-              (med) => med.administrationStatus === "Pending"
+              (med) => med.administrationStatus === "Pending",
             ).length || 0,
           ivFluids:
             admissionRecord.ivFluids?.filter(
-              (iv) => iv.administrationStatus === "Pending"
+              (iv) => iv.administrationStatus === "Pending",
             ).length || 0,
           procedures:
             admissionRecord.procedures?.filter(
-              (proc) => proc.administrationStatus === "Pending"
+              (proc) => proc.administrationStatus === "Pending",
             ).length || 0,
           specialInstructions:
             admissionRecord.specialInstructions?.filter(
-              (inst) => inst.status === "Pending"
+              (inst) => inst.status === "Pending",
             ).length || 0,
         },
 
@@ -5416,7 +5417,10 @@ export const getPatientAdmissionDetails = async (req, res, next) => {
   } catch (error) {
     console.error("Error in getPatientAdmissionDetails:", error);
     next(
-      createError(500, "Internal server error while retrieving patient details")
+      createError(
+        500,
+        "Internal server error while retrieving patient details",
+      ),
     );
   }
 };
@@ -5460,16 +5464,16 @@ export const resetCounters = async (req, res) => {
     if (counterType === "both") {
       result.opdNumber = await PatientCounter.resetCounter(
         "opdNumber",
-        newValue
+        newValue,
       );
       result.ipdNumber = await PatientCounter.resetCounter(
         "ipdNumber",
-        newValue
+        newValue,
       );
     } else {
       result[counterType] = await PatientCounter.resetCounter(
         counterType,
-        newValue
+        newValue,
       );
     }
 
@@ -5667,7 +5671,7 @@ export const getPatientsList = async (req, res) => {
     const startOfToday = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate()
+      today.getDate(),
     );
     const endOfToday = new Date(startOfToday.getTime() + 24 * 60 * 60 * 1000);
     const yesterday = new Date(startOfToday.getTime() - 24 * 60 * 60 * 1000);
@@ -5817,7 +5821,7 @@ export const getPatientsList = async (req, res) => {
             {
               $match: {
                 "latestAdmission.doctor.id": new mongoose.Types.ObjectId(
-                  doctorId
+                  doctorId,
                 ),
               },
             },
@@ -5830,7 +5834,7 @@ export const getPatientsList = async (req, res) => {
             {
               $match: {
                 "latestAdmission.section.id": new mongoose.Types.ObjectId(
-                  sectionId
+                  sectionId,
                 ),
               },
             },
@@ -6251,7 +6255,7 @@ export const generateMedicalCertificate = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -6296,14 +6300,14 @@ export const generateMedicalCertificate = async (req, res) => {
       patient.gender === "Female"
         ? "She"
         : patient.gender === "Male"
-        ? "He"
-        : "They";
+          ? "He"
+          : "They";
     const possessivePronoun =
       patient.gender === "Female"
         ? "her"
         : patient.gender === "Male"
-        ? "his"
-        : "their";
+          ? "his"
+          : "their";
 
     // Generate certificate HTML content
     const certificateHtml = generateCertificateHTML({
@@ -6329,21 +6333,21 @@ export const generateMedicalCertificate = async (req, res) => {
     // Create filename
     const filename = `Medical_Certificate_${patient.name.replace(
       /\s+/g,
-      "_"
+      "_",
     )}_${patientId}_${Date.now()}.pdf`;
 
     // Upload to Google Drive using configured folder ID
     const certificateUrl = await uploadToDrive(
       pdfBuffer,
       filename,
-      "1Trbtp9gwGwNF_3KNjNcfL0DHeSUp0HyV"
+      "1Trbtp9gwGwNF_3KNjNcfL0DHeSUp0HyV",
     );
 
     // Log certificate generation for audit trail
     console.log(
       `Medical certificate generated for patient ${patientId} by doctor ${
         doctor.doctorName
-      } at ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`
+      } at ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
     );
 
     // Send response
@@ -6442,7 +6446,7 @@ export const generateDischargeSummaryByDoctor = async (req, res) => {
         ([key, value]) =>
           !value ||
           (Array.isArray(value) && value.length === 0) ||
-          (typeof value === "string" && value.trim() === "")
+          (typeof value === "string" && value.trim() === ""),
       )
       .map(([key]) => key);
 
@@ -6588,7 +6592,7 @@ export const generateDischargeSummaryByDoctor = async (req, res) => {
     };
 
     console.log(
-      `Generating discharge summary preview for patient ${patientId} by doctor ${userId}`
+      `Generating discharge summary preview for patient ${patientId} by doctor ${userId}`,
     );
 
     // Generate HTML and PDF
@@ -6605,11 +6609,11 @@ export const generateDischargeSummaryByDoctor = async (req, res) => {
     if (uploadToDriveFlag) {
       const folderId =
         process.env.DISCHARGE_SUMMARY_FOLDER_ID ||
-        "1DhWCwHricZoJ8TeQ_muG6J3pnv49C7cy";
+        "1NMX7WXVcSY354Eg8BtDXaPtn-attnl8f";
       try {
         driveLink = await uploadToDrive(pdfBuffer, fileName, folderId);
         console.log(
-          `Discharge summary preview uploaded to Drive: ${driveLink}`
+          `Discharge summary preview uploaded to Drive: ${driveLink}`,
         );
       } catch (uploadError) {
         console.error("Error uploading preview to Drive:", uploadError);
@@ -6738,7 +6742,7 @@ export const confirmSaveSummaryToDB = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.id(
-      metadata.admissionRecordId
+      metadata.admissionRecordId,
     );
 
     if (!admissionRecord) {
@@ -6794,7 +6798,7 @@ export const confirmSaveSummaryToDB = async (req, res) => {
     await patient.save();
 
     console.log(
-      `Discharge summary saved to DB for patient ${patientId}, admission ${metadata.admissionRecordId}`
+      `Discharge summary saved to DB for patient ${patientId}, admission ${metadata.admissionRecordId}`,
     );
 
     // Prepare response data
@@ -6876,7 +6880,7 @@ export const getMedicationStatus = async (req, res) => {
 
     // Find the specific admission record
     const admissionRecord = patient.admissionRecords.find(
-      (record) => record._id.toString() === admissionId
+      (record) => record._id.toString() === admissionId,
     );
 
     if (!admissionRecord) {
@@ -6974,13 +6978,13 @@ export const getMedicationStatus = async (req, res) => {
       totalMedications: medications.length,
       pendingCount: medications.filter(
         (med) =>
-          !med.administrationStatus || med.administrationStatus === "Pending"
+          !med.administrationStatus || med.administrationStatus === "Pending",
       ).length,
       administeredCount: medications.filter(
-        (med) => med.administrationStatus === "Administered"
+        (med) => med.administrationStatus === "Administered",
       ).length,
       skippedCount: medications.filter(
-        (med) => med.administrationStatus === "Skipped"
+        (med) => med.administrationStatus === "Skipped",
       ).length,
     };
 
@@ -7007,13 +7011,13 @@ export const getMedicationStatus = async (req, res) => {
     // Group medications by status for easier frontend handling
     const medicationsByStatus = {
       pending: medicationDetails.filter(
-        (med) => med.administrationStatus === "Pending"
+        (med) => med.administrationStatus === "Pending",
       ),
       administered: medicationDetails.filter(
-        (med) => med.administrationStatus === "Administered"
+        (med) => med.administrationStatus === "Administered",
       ),
       skipped: medicationDetails.filter(
-        (med) => med.administrationStatus === "Skipped"
+        (med) => med.administrationStatus === "Skipped",
       ),
     };
 
@@ -7434,7 +7438,7 @@ export const getSurgicalNotes = async (req, res) => {
       .findOne({ patientId })
       .populate(
         "admissionRecords.surgicalNotes.surgeonId",
-        "name specialization"
+        "name specialization",
       )
       .populate("admissionRecords.surgicalNotes.assistantSurgeons.id", "name")
       .populate("admissionRecords.surgicalNotes.anesthesiologistId", "name");
@@ -7686,7 +7690,7 @@ export const updatePatientMedicalInfo = async (req, res) => {
       // Add new symptoms to existing ones (avoid duplicates)
       const existingSymptoms = admissionRecord.symptomsByDoctor || [];
       const newSymptoms = uniqueSymptoms.filter(
-        (symptom) => !existingSymptoms.includes(symptom)
+        (symptom) => !existingSymptoms.includes(symptom),
       );
 
       if (newSymptoms.length > 0) {
@@ -7708,7 +7712,7 @@ export const updatePatientMedicalInfo = async (req, res) => {
       // Add new diagnosis to existing ones (avoid duplicates)
       const existingDiagnosis = admissionRecord.diagnosisByDoctor || [];
       const newDiagnosis = uniqueDiagnosis.filter(
-        (diag) => !existingDiagnosis.includes(diag)
+        (diag) => !existingDiagnosis.includes(diag),
       );
 
       if (newDiagnosis.length > 0) {
@@ -7726,7 +7730,7 @@ export const updatePatientMedicalInfo = async (req, res) => {
         (prescription) =>
           prescription.medicine &&
           prescription.medicine.name &&
-          prescription.medicine.name.trim()
+          prescription.medicine.name.trim(),
       );
 
       if (validPrescriptions.length > 0) {
