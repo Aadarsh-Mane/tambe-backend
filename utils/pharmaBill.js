@@ -152,7 +152,7 @@ export const generateBillHTML = (sale) => {
       <body>
         <div class="invoice-container">
           <div class="invoice-header">
-            <h1>BHOSALE MEDICO</h1>
+            <h1>TAMBE MEDICO</h1>
             <p>Your Health, Our Priority</p>
             <div class="license-info">
               <p>License No: MH-PZ6-595873</p>
@@ -202,7 +202,7 @@ export const generateBillHTML = (sale) => {
             <div class="total-row">
               <div class="label">Tax (${sale.tax}%):</div>
               <div class="value">₹${((sale.subtotal * sale.tax) / 100).toFixed(
-                2
+                2,
               )}</div>
             </div>
             <div class="total-row grand-total">
@@ -247,7 +247,7 @@ export const generateReturnHTML = (returnDoc) => {
   let originalSaleInfo = "";
   if (returnDoc.originalSale) {
     const originalDate = new Date(
-      returnDoc.originalSale.createdAt
+      returnDoc.originalSale.createdAt,
     ).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "long",

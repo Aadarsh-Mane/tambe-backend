@@ -7240,8 +7240,8 @@ export const generatePatientRecordPDFs = async (req, res) => {
       address:
         "1Shete mala, Near Ganesh Temple,Narayanwadi Road,Narayangaon,Tal Junnar,Dist Pune,Pin 410504",
       phone: "+91 9876543210",
-      email: "info@bhosalehospital.com",
-      website: "www.bhosalehospital.com",
+      email: "info@tambehospital.com",
+      website: "www.tambehospital.com",
       bannerImageUrl: `${HOSPITAL_CONFIG.bannerUrl}`,
       folderId: "1Trbtp9gwGwNF_3KNjNcfL0DHeSUp0HyV", // Your Google Drive folder ID
     };
